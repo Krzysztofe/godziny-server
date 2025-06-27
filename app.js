@@ -7,12 +7,12 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  res.setDefaultEncoding("Access-Control-Allow-Origin", "*");
-  res.setDefaultEncoding(
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE"
   );
-  res.setDefaultEncoding(
+  res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization"
   );
@@ -21,4 +21,4 @@ app.use((req, res, next) => {
 
 app.use(calendarRoutes);
 
-app.listen(3000);
+app.listen(8000);
