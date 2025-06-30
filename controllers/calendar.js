@@ -5,12 +5,12 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.postUser = (req, res, next) => {
-  const respUser = req.body;
+  const reqpUser = req.body;
 
   const newUser = {
     id: new Date().toISOString(),
-    userColor: respUser.userColor,
-    userName: respUser.userName,
+    userColor: reqpUser.userColor,
+    userName: reqpUser.userName,
   };
 
   users.push(newUser);
@@ -31,6 +31,5 @@ exports.deleteUser = (req, res, next) => {
 
   users.splice(userIdx, 1);
   
-  res.status(200).json({ message: "User deleted" });
-  console.log("delete", userId);
+  res.status(204).json({ message: "User deleted" });
 };
