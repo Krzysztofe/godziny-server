@@ -1,11 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const calendarRoutes = require("./routes/calendar");
 
 const app = express();
 
 app.use(bodyParser.json());
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -19,6 +19,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(calendarRoutes);
+app.use("/godziny", calendarRoutes);
 
 app.listen(8000);

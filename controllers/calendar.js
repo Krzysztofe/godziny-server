@@ -1,13 +1,10 @@
-const users = [
-  { id: new Date().toISOString(), userColor: "#d546dd", userName: "name" },
-  { id: new Date().toISOString(), userColor: "#d546dd", userName: "nameccc" },
-];
+const users = require("../models/modelsUsers");
 
-exports.getPosts = (req, res, next) => {
+exports.getUsers = (req, res, next) => {
   res.status(200).json(users);
 };
 
-exports.postPost = (req, res, next) => {
+exports.postUser = (req, res, next) => {
   const respUser = req.body;
 
   const newUser = {
@@ -22,4 +19,18 @@ exports.postPost = (req, res, next) => {
     a.userName.localeCompare(b.userName, undefined, { sensitivity: "base" })
   );
   res.status(201).json(newUser);
+};
+
+exports.deleteUser = (req, res, next) => {
+  const userId = req.params.id;
+  const userIdx = users.findIndex(user => user.id === userId);
+
+  if (userIdx === -1) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  users.splice(userIdx, 1);
+  
+  res.status(200).json({ message: "User deleted" });
+  console.log("delete", userId);
 };

@@ -3,8 +3,8 @@ const calendarController = require("../controllers/calendar");
 
 const router = express.Router();
 
-router.get( "/users",calendarController.getPosts);
-router.post("/users", calendarController.postPost);
+router.get("/users",calendarController.getUsers);
+router.post("/users", calendarController.postUser);
+router.delete("/users/:id", calendarController.deleteUser);
 
 module.exports = router;
-// http://localhost:3000/godziny/ustawienia
