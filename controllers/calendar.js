@@ -1,10 +1,10 @@
 const users = require("../models/modelsUsers");
 
-exports.getUsers = (req, res, next) => {
+exports.getUsers = (req, res) => {
   res.status(200).json(users);
 };
 
-exports.postUser = (req, res, next) => {
+exports.postUser = (req, res) => {
   const reqpUser = req.body;
 
   const newUser = {
@@ -21,7 +21,7 @@ exports.postUser = (req, res, next) => {
   res.status(201).json(newUser);
 };
 
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res) => {
   const userId = req.params.id;
   const userIdx = users.findIndex(user => user.id === userId);
 
