@@ -2,26 +2,26 @@ const AdminModel = require("../models/modelAdmin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-exports.signupAdmin = async (req, res, next) => {
-  const { adminEmail, adminName, adminPassword } = req.body;
+// exports.signupAdmin = async (req, res, next) => {
+//   const { adminEmail, adminName, adminPassword } = req.body;
 
-  try {
-    const hashedPAssword = await bcrypt.hash(adminPassword, 12);
-    const newAdmin = new AdminModel({
-      adminName,
-      adminPassword: hashedPAssword,
-      adminEmail,
-    });
+//   try {
+//     const hashedPAssword = await bcrypt.hash(adminPassword, 12);
+//     const newAdmin = new AdminModel({
+//       adminName,
+//       adminPassword: hashedPAssword,
+//       adminEmail,
+//     });
 
-    await newAdmin.save();
-    res.status(201).json({ message: "Admin created" });
-  } catch (err) {
-    if ((!err, statusCode)) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
+//     await newAdmin.save();
+//     res.status(201).json({ message: "Admin created" });
+//   } catch (err) {
+//     if ((!err, statusCode)) {
+//       err.statusCode = 500;
+//     }
+//     next(err);
+//   }
+// };
 
 exports.loginAdmin = async (req, res, next) => {
   const { adminEmail, adminPassword } = req.body;
@@ -37,11 +37,10 @@ exports.loginAdmin = async (req, res, next) => {
     }
     loadedAdmin = findAdmin;
 
-    console.log('ssss',findAdmin.adminPassword)
-    console.log('passss',adminPassword)
-
-
-    const isEqual = await bcrypt.compare(adminPassword, findAdmin.adminPassword);
+    const isEqual = await bcrypt.compare(
+      adminPassword,
+      findAdmin.adminPassword
+    );
 
     if (!isEqual) {
       const error = new Error("Wrong password");
@@ -55,18 +54,17 @@ exports.loginAdmin = async (req, res, next) => {
     );
     res.status(201).json({ token });
   } catch (err) {
-    if ((!err.statusCode)) {
+    if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
   }
 };
 
-
 // {
-    
+
 //   "adminEmail":
-//   "aaax@wp.pl", 
+//   "aaax@wp.pl",
 //   "adminPassword": "password",
 //   "adminName":
 //   "Eexx"
@@ -74,6 +72,6 @@ exports.loginAdmin = async (req, res, next) => {
 
 // {
 //   "adminEmail":
-//   "aaax@wp.pl", 
+//   "aaax@wp.pl",
 //   "adminPassword": "password"
 //   }

@@ -3,9 +3,10 @@ const usersController = require("../controllers/usersControllers");
 const validation = require("../middlewares/validation");
 const userSchema = require("../validations/userValidationShema");
 const router = express.Router();
+const isAuth = require("../middlewares/isAuth")
 
-router.get("/users", usersController.getUsers);
-router.post("/users", validation(userSchema), usersController.postUser);
-router.delete("/users/:id", usersController.deleteUser);
+router.get("/users", isAuth, usersController.getUsers);
+router.post("/users", isAuth, validation(userSchema), usersController.postUser);
+router.delete("/users/:id", isAuth, usersController.deleteUser);
 
 module.exports = router;
