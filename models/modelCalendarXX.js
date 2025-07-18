@@ -11,8 +11,8 @@ const DaySchema = new Schema({
 
 const MonthSchema = new Schema({
   year: { type: Number, required: true },
-  month: { type: String, required: true }, 
-  calcHours: {
+  month: { type: Number, required: true }, 
+  hours: {
     allHours: { type: Number, required: true },
     currentHours: Number,
     acceptedHours: Number,

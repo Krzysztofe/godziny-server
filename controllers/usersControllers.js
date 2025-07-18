@@ -39,7 +39,7 @@ exports.deleteUser = async (req, res, next) => {
       throw error;
     }
 
-    const result = await userModel.findByIdAndDelete(userId);
+    await userModel.findByIdAndDelete(userId);
 
     res.status(200).json({ message: "User deleted" });
   } catch (err) {

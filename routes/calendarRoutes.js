@@ -5,8 +5,13 @@ const userSchema = require("../validations/userValidationShema");
 const router = express.Router();
 const isAuth = require("../middlewares/isAuth");
 
-router.get("/:year/:month", isAuth, calendarController.getMonth);
+router.get("/", calendarController.getMonths);
+router.get("/:year/:month", calendarController.getMonth);
+router.get("/:year/:month/allHours", calendarController.getAllHours);
+
 router.post("/", calendarController.postMonth);
-// router.delete("/users/:id", isAuth, usersController.deleteUser);
+router.patch("/:id", calendarController.patchAllHours );
+
+router.delete("/:id", calendarController.deleteMonth);
 
 module.exports = router;
