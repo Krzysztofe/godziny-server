@@ -56,14 +56,29 @@ exports.getAllHours = async (req, res) => {
 };
 
 exports.postMonth = async (req, res) => {
-  const { year, month, allHours } = req.body;
-
+  const { year, month, allHours, currentHours } = req.body;
 
   if (!year || !month || allHours === undefined || allHours === null) {
     return res.status(400).json({ message: "Missing month data" });
   }
 
-  const newMonth = new monthModel({ year, month, hours: { allHours } });
+  const newMonth = new monthModel({
+    year,
+    month,
+    hours: {
+      allHours,
+      currentHours,
+      acceptedHours: 0,
+      rejectedHours: 0,
+      submittedHours: 0,
+    },
+    columns: {
+      submitted: [],
+      accepted: [],
+      rejected: [],
+    },
+  });
+
   try {
     const savedMonth = await newMonth.save();
     res.status(201).json(savedMonth);
@@ -79,30 +94,90 @@ exports.postMonth = async (req, res) => {
 //     "allHours": 130
 //    }
 
+exports.patchDay = async (req, res) => {
+  const { year, month } = req.params;
+  const newDay = req.body;
+
+  // console.log('patchDay',)
+
+  if (!newDay || !newDay.date || newDay.hours == null) {
+    return res.status(400).json({ message: "Invalid day data" });
+  }
+
+  try {
+    const updatedMonth = await monthModel.findOneAndUpdate(
+      { year: +year, month: +month },
+      {
+        $push: { "columns.submitted": newDay },
+        $inc: { "hours.submittedHours": newDay.hours },
+      },
+      { new: true }
+    );
+
+    if (!updatedMonth) {
+      return res.status(404).json({ message: "Month not found" });
+    }
+
+    res.status(200).json({ message: "Day added", updatedMonth });
+  } catch (error) {
+    console.error("Error adding day:", error);
+    res.status(500).json({ message: "Failed to add day" });
+  }
+};
+
+exports.patchMonth = async (req, res) => {
+  try {
+    const { year, month } = req.params;
+    const { columns, hours } = req.body;
+
+    if (!columns || !hours) {
+      return res
+        .status(400)
+        .json({ error: "Missing columns or hours in request body" });
+    }
+
+    const monthDoc = await monthModel.findOne({ year, month });
+
+    if (!monthDoc) {
+      return res.status(404).json({ error: "Month not found" });
+    }
+
+    monthDoc.columns = columns;
+    monthDoc.hours = hours;
+
+    await monthDoc.save();
+
+    res.status(200).json({
+      message: "Month successfully updated",
+      month: monthDoc,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 exports.patchAllHours = async (req, res) => {
-    const { id } = req.params;
-    const { allHours } = req.body;
-  
-    try {
-      const updatedMonth = await monthModel.findByIdAndUpdate(
-        id,
-        { "hours.allHours": allHours },
-        { new: true }
-      );
-  
-      if (!updatedMonth) {
-        return res.status(404).json({ message: "Month not found" });
-      }
-  
-      res.status(200).json({ message: "allHours updated", updatedMonth });
-    } catch (error) {
-      console.error("Error updating allHours:", error);
-      res.status(500).json({ message: "Failed to update allHours" });
+  const { id } = req.params;
+  const { allHours, currentHours } = req.body;
+
+  try {
+    const updatedMonth = await monthModel.findByIdAndUpdate(
+      id,
+      { "hours.allHours": allHours, "hours.currentHours": currentHours },
+      { new: true }
+    );
+
+    if (!updatedMonth) {
+      return res.status(404).json({ message: "Month not found" });
     }
-  };
 
-
+    res.status(200).json({ message: "allHours updated", updatedMonth });
+  } catch (error) {
+    console.error("Error updating allHours:", error);
+    res.status(500).json({ message: "Failed to update allHours" });
+  }
+};
 
 exports.deleteMonth = async (req, res) => {
   const monthId = req.params.id;
