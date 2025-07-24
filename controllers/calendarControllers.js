@@ -18,14 +18,26 @@ exports.getMonths = async (req, res) => {
 exports.getMonth = async (req, res) => {
   const { year, month } = req.params;
 
+  const parsedYear = parseInt(year, 10);
+  const parsedMonth = parseInt(month, 10);
+
+  if (
+    isNaN(parsedYear) ||
+    isNaN(parsedMonth) ||
+    parsedMonth < 1 ||
+    parsedMonth > 12
+  ) {
+    return res.status(400).json({ message: "Invalid year or month format" });
+  }
+
   try {
     const monthDoc = await monthModel.findOne({
-      year: parseInt(year),
-      month: month.padStart(2, "0"),
+      year: parsedYear,
+      month: parsedMonth,
     });
 
     if (!monthDoc) {
-      return res.status(404).json({ message: "Month not found" });
+      return res.status(200).json(null);
     }
 
     res.status(200).json(monthDoc);
@@ -34,6 +46,26 @@ exports.getMonth = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch month" });
   }
 };
+
+// exports.getMonth = async (req, res) => {
+//   const { year, month } = req.params;
+
+//   try {
+//     const monthDoc = await monthModel.findOne({
+//       year: parseInt(year),
+//       month: month.padStart(2, "0"),
+//     });
+
+//     if (!monthDoc) {
+//       return res.status(404).json({ message: "Month not found" });
+//     }
+
+//     res.status(200).json(monthDoc);
+//   } catch (error) {
+//     console.error("Error fetching month:", error);
+//     res.status(500).json({ message: "Failed to fetch month" });
+//   }
+// };
 
 exports.getAllHours = async (req, res) => {
   const { year, month } = req.params;
@@ -44,13 +76,13 @@ exports.getAllHours = async (req, res) => {
         year: parseInt(year),
         month: parseInt(month),
       })
-      .select("hours.allHours");
+      .select("hours");
 
     if (!monthDoc) {
       return res.status(404).json({ message: "Month not found" });
     }
 
-    res.status(200).json({ allHours: monthDoc.hours.allHours });
+    res.status(200).json({ hours: monthDoc.hours });
   } catch (error) {
     console.error("Error fetching allHours:", error);
     res.status(500).json({ message: "Failed to fetch allHours" });
@@ -128,7 +160,7 @@ exports.patchMonth = async (req, res) => {
     const { year, month } = req.params;
     const { columns, hours } = req.body;
 
-    console.log('calcHours', hours);
+    console.log("calcHours", hours);
 
     if (!columns || !hours) {
       return res
@@ -203,12 +235,9 @@ exports.deleteMonth = async (req, res) => {
   }
 };
 
-
 exports.deleteDay = async (req, res) => {
   const { year, month } = req.params;
   const { dayId, columnType, calcHours } = req.body;
-
- 
 
   if (!["submitted", "accepted", "rejected"].includes(columnType)) {
     return res.status(400).json({ message: "Invalid column type" });
@@ -223,7 +252,6 @@ exports.deleteDay = async (req, res) => {
 
     const originalLength = monthDoc.columns[columnType].length;
 
- 
     monthDoc.columns[columnType] = monthDoc.columns[columnType].filter(
       (day) => day._id.toString() !== dayId
     );
@@ -234,7 +262,6 @@ exports.deleteDay = async (req, res) => {
         .json({ message: "Day not found in the specified column" });
     }
 
-   
     if (calcHours && typeof calcHours === "object") {
       monthDoc.hours = calcHours;
     }
@@ -250,9 +277,3 @@ exports.deleteDay = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
-
-
-
