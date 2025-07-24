@@ -7,6 +7,7 @@ const DaySchema = new Schema({
   place: String,
   userColor: String,
   userName: String,
+  monthId: String,
 });
 
 const MonthSchema = new Schema({

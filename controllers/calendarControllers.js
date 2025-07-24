@@ -1,5 +1,7 @@
 const monthModel = require("../models/modelCalendarXX");
 
+// get
+
 exports.getMonths = async (req, res) => {
   try {
     const allMonths = await monthModel
@@ -179,6 +181,8 @@ exports.patchAllHours = async (req, res) => {
   }
 };
 
+// delete
+
 exports.deleteMonth = async (req, res) => {
   const monthId = req.params.id;
 
@@ -198,5 +202,54 @@ exports.deleteMonth = async (req, res) => {
       err.statusCode = 500;
     }
     next(err);
+  }
+};
+
+exports.deleteDay = async (req, res) => {
+  const { year, month } = req.params;
+  const { dayId, columnType } = req.body; 
+
+
+  if (!["submitted", "accepted", "rejected"].includes(columnType)) {
+    return res.status(400).json({ message: "Invalid column type" });
+  }
+
+  try {
+    const monthDoc = await monthModel.findOne({ year: +year, month: +month });
+
+    if (!monthDoc) {
+      return res.status(404).json({ message: "Month not found" });
+    }
+
+    const originalLength = monthDoc.columns[columnType].length;
+
+    monthDoc.columns[columnType] = monthDoc.columns[columnType].filter(
+      (day) => day._id.toString() !== dayId
+    );
+
+    if (monthDoc.columns[columnType].length === originalLength) {
+      return res
+        .status(404)
+        .json({ message: "Day not found in the specified column" });
+    }
+
+    // Optionally adjust related hours, e.g.:
+    const deletedDay = monthDoc.columns[columnType].find(
+      (day) => day._id.toString() === dayId
+    );
+
+    if (deletedDay) {
+      const field = columnType + "Hours";
+      monthDoc.hours[field] -= deletedDay.hours || 0;
+    }
+
+    await monthDoc.save();
+
+    res
+      .status(200)
+      .json({ message: "Day deleted successfully", updatedMonth: monthDoc });
+  } catch (error) {
+    console.error("Error deleting day:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

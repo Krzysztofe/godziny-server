@@ -16,5 +16,6 @@ router.patch("/month/:year/:month", calendarController.patchMonth);
 router.patch("/:id", calendarController.patchAllHours);
 
 router.delete("/:id", calendarController.deleteMonth);
+router.delete("/:year/:month", calendarController.deleteDay);
 
 module.exports = router;
