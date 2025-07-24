@@ -90,19 +90,13 @@ exports.postMonth = async (req, res) => {
   }
 };
 
-// {
-//     "year": 2024,
-//    "month": 8,
-//     "allHours": 130
-//    }
+// patch
 
 exports.patchDay = async (req, res) => {
   const { year, month } = req.params;
-  const newDay = req.body;
+  const { day, calcHours } = req.body;
 
-  // console.log('patchDay',)
-
-  if (!newDay || !newDay.date || newDay.hours == null) {
+  if (!day || !day.date || day.hours == null) {
     return res.status(400).json({ message: "Invalid day data" });
   }
 
@@ -110,8 +104,8 @@ exports.patchDay = async (req, res) => {
     const updatedMonth = await monthModel.findOneAndUpdate(
       { year: +year, month: +month },
       {
-        $push: { "columns.submitted": newDay },
-        $inc: { "hours.submittedHours": newDay.hours },
+        $push: { "columns.submitted": day },
+        $set: { hours: calcHours },
       },
       { new: true }
     );
@@ -120,7 +114,9 @@ exports.patchDay = async (req, res) => {
       return res.status(404).json({ message: "Month not found" });
     }
 
-    res.status(200).json({ message: "Day added", updatedMonth });
+    res
+      .status(200)
+      .json({ message: "Day added and hours updated", updatedMonth });
   } catch (error) {
     console.error("Error adding day:", error);
     res.status(500).json({ message: "Failed to add day" });
@@ -131,6 +127,8 @@ exports.patchMonth = async (req, res) => {
   try {
     const { year, month } = req.params;
     const { columns, hours } = req.body;
+
+    console.log('calcHours', hours);
 
     if (!columns || !hours) {
       return res
@@ -205,10 +203,12 @@ exports.deleteMonth = async (req, res) => {
   }
 };
 
+
 exports.deleteDay = async (req, res) => {
   const { year, month } = req.params;
-  const { dayId, columnType } = req.body; 
+  const { dayId, columnType, calcHours } = req.body;
 
+ 
 
   if (!["submitted", "accepted", "rejected"].includes(columnType)) {
     return res.status(400).json({ message: "Invalid column type" });
@@ -223,6 +223,7 @@ exports.deleteDay = async (req, res) => {
 
     const originalLength = monthDoc.columns[columnType].length;
 
+ 
     monthDoc.columns[columnType] = monthDoc.columns[columnType].filter(
       (day) => day._id.toString() !== dayId
     );
@@ -233,23 +234,25 @@ exports.deleteDay = async (req, res) => {
         .json({ message: "Day not found in the specified column" });
     }
 
-    // Optionally adjust related hours, e.g.:
-    const deletedDay = monthDoc.columns[columnType].find(
-      (day) => day._id.toString() === dayId
-    );
-
-    if (deletedDay) {
-      const field = columnType + "Hours";
-      monthDoc.hours[field] -= deletedDay.hours || 0;
+   
+    if (calcHours && typeof calcHours === "object") {
+      monthDoc.hours = calcHours;
     }
 
     await monthDoc.save();
 
-    res
-      .status(200)
-      .json({ message: "Day deleted successfully", updatedMonth: monthDoc });
+    res.status(200).json({
+      message: "Day deleted and hours updated successfully",
+      updatedMonth: monthDoc,
+    });
   } catch (error) {
     console.error("Error deleting day:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+
+
+
