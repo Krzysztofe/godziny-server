@@ -10,7 +10,7 @@ const startServer = async () => {
   try {
     // await mongoose.connect(process.env.MONGO_CONNECTION);
     console.log("Connected to MongoDB");
-    app.listen("https://godziny-server.vercel.app", () => {
+    app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
