@@ -47,25 +47,7 @@ exports.getMonth = async (req, res) => {
   }
 };
 
-// exports.getMonth = async (req, res) => {
-//   const { year, month } = req.params;
 
-//   try {
-//     const monthDoc = await monthModel.findOne({
-//       year: parseInt(year),
-//       month: month.padStart(2, "0"),
-//     });
-
-//     if (!monthDoc) {
-//       return res.status(404).json({ message: "Month not found" });
-//     }
-
-//     res.status(200).json(monthDoc);
-//   } catch (error) {
-//     console.error("Error fetching month:", error);
-//     res.status(500).json({ message: "Failed to fetch month" });
-//   }
-// };
 
 exports.getAllHours = async (req, res) => {
   const { year, month } = req.params;

@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const authRoutes = require("./routes/authRoutes")
+const authRoutes = require("./routes/authRoutes");
 const usersRoutes = require("./routes/usersRoutes");
-const calendarRoutes = require("./routes/calendarRoutes")
+const calendarRoutes = require("./routes/calendarRoutes");
 const cors = require("./middlewares/cors");
 const errorHandler = require("./middlewares/errorHandler");
 const notFound = require("./middlewares/notFound");
+const helmet = require("helmet");
 
+app.use(helmet())
 app.use(bodyParser.json());
 app.use(cors);
 app.use("/", authRoutes);
