@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors);
 
 // routes
-app.use("/", (req, res) => res.status(200).json("Godziny app"));
+// app.use("/", (req, res) => res.status(200).json("Godziny app"));
 app.use("/", authRoutes);
 app.use("/hours", usersRoutes);
 app.use("/calendar", calendarRoutes);
