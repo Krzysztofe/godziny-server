@@ -27,7 +27,7 @@ bcryptjs, body-parser, compression, helmet, jsonwebtoken, mongoose, nodemon, yup
  MongoDB Atlas / Mongoose ODM
 
 
-* The structure of the month data stored in MongoDB Atlas is as follows:
+##  The structure of the month data stored in MongoDB Atlas is as follows:
 
  <div>
 <img src="https://github.com/user-attachments/assets/5846c847-6fd8-4253-a0ab-a8d9508b5614" width=450" height="400" alt="Screenshot">
