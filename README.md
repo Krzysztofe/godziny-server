@@ -25,3 +25,22 @@ bcryptjs, body-parser, compression, helmet, jsonwebtoken, mongoose, nodemon, yup
 
 * Database: <br/>
  MongoDB Atlas / Mongoose ODM
+
+
+* The structure of the month data stored in MongoDB Atlas is as follows:
+
+ <div>
+<img src="https://github.com/user-attachments/assets/5846c847-6fd8-4253-a0ab-a8d9508b5614" width=450" height="400" alt="Screenshot">
+</div>
+
+
+## Prerequisites
+* Before getting started, make sure you have the Node.js and npm or yarn
+* Node version: **Node.js v18.16.1**
+* Clone this repository to your local machine
+* Navigate to the project directory: **cd .\godziny-server**
+* Install the project dependencies by running **npm install** or **yarn install**
+* Start the development server: **cd .\godziny-server npm start** or **yarn start**
+* Open your browser and visit your localhost:8000.
+* URLs not hidden in the .env file.
+
