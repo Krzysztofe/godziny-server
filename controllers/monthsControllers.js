@@ -1,4 +1,4 @@
-const monthModel = require("../models/modelCalendarXX");
+const monthModel = require("../models/modelCalendar");
 
 // get
 
@@ -64,7 +64,7 @@ exports.getAllHours = async (req, res) => {
       return res.status(404).json({ message: "Month not found" });
     }
 
-    res.status(200).json({ hours: monthDoc.hours });
+    res.status(200).json(monthDoc.hours );
   } catch (error) {
     console.error("Error fetching allHours:", error);
     res.status(500).json({ message: "Failed to fetch allHours" });
@@ -142,7 +142,7 @@ exports.patchMonth = async (req, res) => {
     const { year, month } = req.params;
     const { columns, hours } = req.body;
 
-    console.log("calcHours", hours);
+
 
     if (!columns || !hours) {
       return res
@@ -241,7 +241,7 @@ exports.deleteDay = async (req, res) => {
     if (monthDoc.columns[columnType].length === originalLength) {
       return res
         .status(404)
-        .json({ message: "Day not found in the specified column" });
+        .json({ message: "Day not found in the column" });
     }
 
     if (calcHours && typeof calcHours === "object") {
