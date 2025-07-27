@@ -6,7 +6,7 @@ const isAuth = require("../middlewares/isAuth");
 const allHoursValidationSchema = require("../validations/allHoursValidationSchema.js");
 const dayValidationSchema = require("../validations/dayValidationShema.js");
 const monthExistValidation = require("../validations/monthExistValidation.js");
-
+const dayExistValidation = require("../validations/dayExistValidation.js")
 
 router.get("/", isAuth, calendarController.getMonths);
 router.get("/:year/:month", isAuth, calendarController.getMonth);
@@ -18,6 +18,7 @@ router.patch(
   "/:year/:month",
   isAuth,
   validation(dayValidationSchema),
+  dayExistValidation,
   calendarController.patchDay
 );
 router.patch("/month/:year/:month", isAuth, calendarController.patchMonth);

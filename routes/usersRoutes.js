@@ -7,7 +7,7 @@ const isAuth = require("../middlewares/isAuth");
 const userExistValidation = require("../validations/userExistValidation")
 
 router.get("/", isAuth, usersController.getUsers);
-router.post("/", isAuth, userExistValidation, usersController.postUser);
+router.post("/", isAuth, validation(userSchema), userExistValidation, usersController.postUser);
 router.delete("/:id", isAuth, usersController.deleteUser);
 
 module.exports = router;
