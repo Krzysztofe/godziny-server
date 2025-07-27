@@ -175,6 +175,7 @@ exports.patchAllHours = async (req, res) => {
   const { id } = req.params;
   const { allHours, currentHours } = req.body;
 
+
   try {
     const updatedMonth = await monthModel.findByIdAndUpdate(
       id,

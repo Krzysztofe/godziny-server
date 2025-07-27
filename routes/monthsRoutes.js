@@ -1,9 +1,9 @@
 const express = require("express");
 const calendarController = require("../controllers/monthsControllers");
 const validation = require("../middlewares/validation");
-const userSchema = require("../validations/userValidationShema");
 const router = express.Router();
 const isAuth = require("../middlewares/isAuth");
+const allHoursValidationSchema = require("../validations/allHoursValidationSchema.js")
 
 router.get("/", isAuth, calendarController.getMonths);
 router.get("/:year/:month", isAuth, calendarController.getMonth);
@@ -13,7 +13,7 @@ router.post("/", isAuth, calendarController.postMonth);
 
 router.patch("/:year/:month", isAuth, calendarController.patchDay);
 router.patch("/month/:year/:month", isAuth, calendarController.patchMonth);
-router.patch("/:id", isAuth, calendarController.patchAllHours);
+router.patch("/:id", isAuth,  validation(allHoursValidationSchema),calendarController.patchAllHours);
 
 router.delete("/:id", isAuth, calendarController.deleteMonth);
 router.delete("/:year/:month", isAuth, calendarController.deleteDay);
