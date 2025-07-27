@@ -4,7 +4,7 @@ const validation = require("../middlewares/validation");
 const router = express.Router();
 const isAuth = require("../middlewares/isAuth");
 const allHoursValidationSchema = require("../validations/allHoursValidationSchema.js");
-const dayValidationSchema = require("../validations/dayValidationShema.js");
+const dayValidationSchema = require("../validations/dayValidation.js");
 const monthExistValidation = require("../validations/monthExistValidation.js");
 const dayExistValidation = require("../validations/dayExistValidation.js")
 
