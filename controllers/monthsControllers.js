@@ -110,6 +110,8 @@ exports.patchDay = async (req, res) => {
   const { year, month } = req.params;
   const { day, calcHours } = req.body;
 
+  console.log('',day)
+
   if (!day || !day.date || day.hours == null) {
     return res.status(400).json({ message: "Invalid day data" });
   }

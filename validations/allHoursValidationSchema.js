@@ -6,8 +6,8 @@ const allHoursValidationSchema = yup.object().shape({
     .transform((value, originalValue) =>
       typeof originalValue === "string" ? parseFloat(originalValue) : value
     )
-    .min(0, "allHours cannot be less than 0")
-    .max(320, "allHours cannot be more than 320")
-    .required("allHours is required"),
+    .min(0, "All hours min 0")
+    .max(320, "All hours max. 320")
+    .required("All hours required"),
 });
 module.exports = allHoursValidationSchema;
