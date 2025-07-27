@@ -14,7 +14,7 @@ exports.postUser = async (req, res) => {
   const { userColor, userName } = req.body;
 
   if (!userColor || !userName) {
-    return res.status(400).json({ message: "Missing userName or userColor" });
+    return res.status(400).json({ message: "Missing user name or user color" });
   }
 
   const newUser = new userModel({ userColor, userName });

@@ -7,6 +7,7 @@ const allHoursValidationSchema = require("../validations/allHoursValidationSchem
 const dayValidationSchema = require("../validations/dayValidationShema.js");
 const monthExistValidation = require("../validations/monthExistValidation.js");
 
+
 router.get("/", isAuth, calendarController.getMonths);
 router.get("/:year/:month", isAuth, calendarController.getMonth);
 router.get("/:year/:month/allHours", isAuth, calendarController.getAllHours);
