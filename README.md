@@ -6,7 +6,7 @@
 ## Backend Features 
 * Auth
 * Password hashing
-* Input validations
+* Input validations (yup, custom validations)
 * Database integration: MongoDB Atlas / Mongoose ODM
 * RESTful API - GET, POST, PUT, DELETE endpoints
 * Environment configuration
