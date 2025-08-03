@@ -1,7 +1,7 @@
 const cors = (req, res, next) => {
-  const allowedOrigin = "https://krzysztofe.github.io";
+  const allowedOrigin = "*";
 
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE"
